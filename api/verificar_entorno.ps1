@@ -11,13 +11,27 @@ Write-Host ""
 # Python
 Write-Host "--- Python ---" -ForegroundColor Yellow
 $pythonCmd = Get-Command python -ErrorAction SilentlyContinue
-if (-not $pythonCmd) {
-    Write-Host "  [FALTA] Python no encontrado en PATH" -ForegroundColor Red
-    Write-Host "  Instalar: https://www.python.org/downloads/ (marcar 'Add to PATH')"
+$pythonOk = $false
+if ($pythonCmd) {
+    $pythonPath = $pythonCmd.Source
+    if ($pythonPath -like "*WindowsApps*") {
+        Write-Host "  [FALTA] Solo existe el alias de Microsoft Store (no es Python real)" -ForegroundColor Red
+        Write-Host "  Instalar desde: https://www.python.org/downloads/"
+        Write-Host "  O: winget install Python.Python.3.12"
+        Write-Host "  Despues desactivar alias en: Configuracion > Aplicaciones > Alias de ejecucion"
+    } else {
+        $ver = python --version 2>&1
+        if ($ver -like "Python 3.*") {
+            Write-Host "  [OK] $ver en $pythonPath" -ForegroundColor Green
+            Write-Host "  pip:" (python -m pip --version 2>&1)
+            $pythonOk = $true
+        } else {
+            Write-Host "  [FALTA] Python real no detectado en $pythonPath" -ForegroundColor Red
+        }
+    }
 } else {
-    $ver = python --version 2>&1
-    Write-Host "  [OK] $ver en $($pythonCmd.Source)" -ForegroundColor Green
-    Write-Host "  pip:" (python -m pip --version 2>&1)
+    Write-Host "  [FALTA] Python no encontrado en PATH" -ForegroundColor Red
+    Write-Host "  Instalar: winget install Python.Python.3.12"
 }
 
 Write-Host ""
@@ -72,7 +86,7 @@ if (Test-Path (Join-Path $here "data\olnatura.db")) {
 
 Write-Host ""
 Write-Host "--- Dependencias Python (api) ---" -ForegroundColor Yellow
-if ($pythonCmd) {
+if ($pythonOk) {
     Push-Location $here
     if (Test-Path "requirements.txt") {
         $needInstall = $false
@@ -80,7 +94,7 @@ if ($pythonCmd) {
             if ($line -match "^([a-zA-Z0-9_-]+)") {
                 $pkg = $Matches[1]
                 if ($pkg -eq "uvicorn") { continue }
-                pip show $pkg 2>$null | Out-Null
+                python -m pip show $pkg 2>$null | Out-Null
                 if ($LASTEXITCODE -ne 0) {
                     Write-Host "  [FALTA] $pkg" -ForegroundColor Red
                     $needInstall = $true
@@ -94,6 +108,8 @@ if ($pythonCmd) {
         }
     }
     Pop-Location
+} else {
+    Write-Host "  [SKIP] Instale Python primero" -ForegroundColor Gray
 }
 
 Write-Host ""
