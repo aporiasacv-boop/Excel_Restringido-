@@ -46,6 +46,7 @@ Private Function HttpRequest(ByVal method As String, ByVal path As String, ByVal
 
     http.Open method, url, False
     http.setRequestHeader "Content-Type", "application/json"
+    http.setRequestHeader "ngrok-skip-browser-warning", "1"
     If Len(jsonBody) > 0 Then
         http.send jsonBody
     Else
