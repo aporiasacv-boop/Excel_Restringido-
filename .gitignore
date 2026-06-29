@@ -1,0 +1,15 @@
+# Excel temporales y bloqueos
+~$*.xls*
+*.tmp
+
+# Configuración local (no versionar credenciales de producción)
+config.local.ini
+
+# Logs generados en runtime
+logs/
+*.log
+
+# Sistema
+Thumbs.db
+Desktop.ini
+.DS_Store
