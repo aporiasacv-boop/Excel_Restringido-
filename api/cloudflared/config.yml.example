@@ -1,0 +1,7 @@
+tunnel: TU-TUNNEL-ID
+credentials-file: C:\Olnatura\cloudflared\credentials.json
+
+ingress:
+  - hostname: auth.tu-dominio.com
+    service: http://127.0.0.1:8000
+  - service: http_status:404
