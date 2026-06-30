@@ -4,7 +4,7 @@ Option Explicit
 Public Const APP_NAME As String = "Olnatura"
 Public Const APP_VERSION As String = "2.0.0"
 
-' URL del servidor en PC de TI (ngrok). Debe estar activo: ngrok http 8010
+' URL del tunel ngrok "olnatura" (puerto 8011). Actualizar con api\actualizar_url_ngrok.ps1
 ' En TI y en produccion los Excel usan esta misma URL.
 Public Const API_BASE_URL As String = "https://unexpired-joyfully-exfoliate.ngrok-free.dev"
 

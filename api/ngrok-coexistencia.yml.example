@@ -1,0 +1,22 @@
+# Preferir el instalador en prueba_ov (fusiona authtoken automaticamente):
+#   cd ..\prueba_ov
+#   powershell -File instalar-ngrok-coexistencia.ps1
+#   .\INICIAR_NGROK.bat
+#
+# O copiar manualmente a: %LOCALAPPDATA%\ngrok\ngrok.yml
+#
+# - dynamics  -> Java Spring Boot (prueba_ov) puerto 8080
+# - olnatura  -> FastAPI login Excel puerto 8011
+
+version: 3
+
+agent:
+  authtoken: PEGAR_TOKEN_NGROK_AQUI
+
+tunnels:
+  dynamics:
+    addr: 8080
+    proto: http
+  olnatura:
+    addr: 8011
+    proto: http
