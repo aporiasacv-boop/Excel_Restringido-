@@ -7,5 +7,8 @@ Ejemplo: NIKZON 1.xlsm, NIKZON 2.xlsm, etc.
 Estos archivos NO van en GitHub (son los formatos de la empresa).
 Copielos desde OneDrive o desde el respaldo que tengan en TI.
 
-Luego ejecute: 2_INSTALAR_EXCEL.bat
-La salida queda en la carpeta LISTOS\
+IMPORTANTE para que no se cuelgue:
+- Los .xlsm deben estar DESCARGADOS en el disco (no solo en la nube).
+  Clic derecho en cada archivo -> "Mantener siempre en este dispositivo"
+- Si tarda mas de 3 min sin avanzar: Ctrl+C, Administrador de tareas,
+  finalizar EXCEL.EXE, y volver a ejecutar 2_INSTALAR_EXCEL.bat

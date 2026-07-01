@@ -97,32 +97,45 @@ if ($Workbooks.Count -eq 0) {
 
 Write-Host "Origen: $($Workbooks.Count) archivo(s) NIKZON"
 
+if ($Force) {
+    Get-Process -Name EXCEL -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+    Start-Sleep -Seconds 2
+}
+
 $excel = New-Object -ComObject Excel.Application
 $excel.Visible = $false
 $excel.DisplayAlerts = $false
 $excel.AutomationSecurity = 1
+$excel.ScreenUpdating = $false
+$excel.EnableEvents = $false
+try { $excel.Calculation = -4135 } catch { }  # xlCalculationManual
 $xlOpenXMLWorkbookMacroEnabled = 52
 
 try {
     foreach ($wbFile in $Workbooks) {
+        Write-Host ""
         Write-Host "Instalando: $($wbFile.Name)"
 
         $sourcePath = $wbFile.FullName
         Clear-ReadOnlyFlag $sourcePath
 
         $workCopy = Join-Path $TempDir $wbFile.Name
+        Write-Host "  Copiando a temp..."
         Copy-Item -LiteralPath $sourcePath -Destination $workCopy -Force
         Clear-ReadOnlyFlag $workCopy
         if (-not (Test-Path -LiteralPath $workCopy)) {
             Write-Error "No se pudo copiar a temp: $sourcePath"
         }
 
-        $book = $excel.Workbooks.Open($workCopy, $false, $false)
+        Write-Host "  Abriendo en Excel (archivos grandes pueden tardar 1-2 min)..."
+        $book = $excel.Workbooks.Open($workCopy, 0, $false)
+        Write-Host "  Abierto."
         if ($null -eq $book.VBProject) {
             Write-Error "Sin acceso VBA. Activa 'Confiar en el acceso al modelo de objetos de VBA' en Excel."
         }
         $vbProj = $book.VBProject
 
+        Write-Host "  Limpiando modulos viejos..."
         $removeList = @()
         foreach ($comp in @($vbProj.VBComponents)) {
             if ($comp.Type -eq 1 -or $comp.Type -eq 2 -or $comp.Type -eq 3) {
@@ -139,6 +152,8 @@ try {
             Assert-ComponentType $comp 1 $fileName
             Write-Host "  + $($comp.Name)"
         }
+
+        Write-Host "  Guardando en LISTOS\..."
 
         if ((Get-ModuleCount $vbProj) -ne $StdModules.Count) {
             Write-Error "Modulos incompletos en $($wbFile.Name)"
