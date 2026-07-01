@@ -80,7 +80,7 @@ New-Item -ItemType Directory -Path $InputDir -Force | Out-Null
 $Workbooks = @()
 $Workbooks += Get-ChildItem -LiteralPath $InputDir -Filter "NIKZON*.xlsm" -File -ErrorAction SilentlyContinue
 $Workbooks += Get-ChildItem -LiteralPath $ProjectRoot -Filter "NIKZON*.xlsm" -File -ErrorAction SilentlyContinue
-$Workbooks = $Workbooks | Select-Object -Unique FullName
+$Workbooks = @($Workbooks | Sort-Object FullName -Unique)
 
 if ($Workbooks.Count -eq 0) {
     Write-Host ""
@@ -113,6 +113,9 @@ try {
         $workCopy = Join-Path $TempDir $wbFile.Name
         Copy-Item -LiteralPath $sourcePath -Destination $workCopy -Force
         Clear-ReadOnlyFlag $workCopy
+        if (-not (Test-Path -LiteralPath $workCopy)) {
+            Write-Error "No se pudo copiar a temp: $sourcePath"
+        }
 
         $book = $excel.Workbooks.Open($workCopy, $false, $false)
         if ($null -eq $book.VBProject) {
