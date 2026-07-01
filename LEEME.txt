@@ -1,22 +1,18 @@
-PC DE TI - 4 ventanas abiertas
-===============================
+PC DE TI - EXCEL NIKZON
+=======================
 
 PULL:
-  git pull origin main   (en Prueba_Ov y Excel_Restringido-)
+  git pull origin main
 
-TOKEN ngrok (solo 1 vez):
-  Prueba_Ov\0_TOKEN_NGROK.bat
+INSTALAR (solo la primera vez):
+  0_INSTALAR_CLOUDFLARE.bat   -> descarga cloudflared (sin terminal)
 
-CADA DIA:
-  1. Prueba_Ov\1_ORDENES_JAVA.bat        Java :8080
-  2. Excel\1_API_OLNATURA.bat            Python :8011
-  3. Prueba_Ov\2_NGROK.bat               Ordenes (ngrok)
-  4. Excel\2_TUNEL_OLNATURA.bat          Login Excel (cloudflared)
+CADA DIA (con Prueba_Ov abierto tambien):
+  1. 1_API_OLNATURA.bat       Python :8011
+  2. 2_TUNEL_OLNATURA.bat     URL publica trycloudflare.com
 
-URL Ordenes (fija):
-  https://unexpired-joyfully-exfoliate.ngrok-free.dev
-  -> Excel Ordenes, Resultado!B1
+Despues de tener la URL del tunel:
+  git pull + 2_INSTALAR_EXCEL.bat + subir LISTOS\ a OneDrive
 
-URL Olnatura (cambia al reiniciar tunel 4):
-  La que muestra 2_TUNEL_OLNATURA.bat (trycloudflare.com)
-  -> Pasar al equipo para codigo + 2_INSTALAR_EXCEL.bat
+Ordenes de venta (otra carpeta Prueba_Ov):
+  0_TOKEN_NGROK.bat (1 vez), 1_ORDENES_JAVA.bat, 2_NGROK.bat
