@@ -1,4 +1,2 @@
 @echo off
-cd /d "%~dp0"
-powershell -ExecutionPolicy Bypass -File "%~dp0install.ps1" -Force
-pause
+call "%~dp02_INSTALAR_EXCEL.bat"

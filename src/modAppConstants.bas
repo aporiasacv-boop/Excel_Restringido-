@@ -4,9 +4,8 @@ Option Explicit
 Public Const APP_NAME As String = "Olnatura"
 Public Const APP_VERSION As String = "2.0.0"
 
-' URL del tunel ngrok "olnatura" (puerto 8011). Actualizar con api\actualizar_url_ngrok.ps1
-' En TI y en produccion los Excel usan esta misma URL.
-Public Const API_BASE_URL As String = "https://unexpired-joyfully-exfoliate.ngrok-free.dev"
+' URL ngrok del tunel olnatura (puerto 8011). Se actualiza tras arrancar 2_NGROK.bat
+Public Const API_BASE_URL As String = "https://PEGAR-URL-OLNATURA-AQUI.ngrok-free.dev"
 
 ' Celda del analista (ajustar por formato si hace falta)
 Public Const ANALYST_CELL As String = "B5"

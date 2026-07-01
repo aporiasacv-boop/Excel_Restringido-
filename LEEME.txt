@@ -1,0 +1,17 @@
+PC DE TI - EXCEL NIKZON (LOGIN)
+================================
+
+Cada dia:
+  1. Doble clic en 1_API_OLNATURA.bat (puerto 8011, dejar abierto)
+  2. En Prueba_Ov: 2_NGROK.bat (dejar abierto)
+
+Cuando tengan la URL ngrok de Olnatura (puerto 8011):
+  - El equipo actualiza modAppConstants.bas en GitHub
+  - git pull
+  - Doble clic en 2_INSTALAR_EXCEL.bat
+  - Subir LISTOS\*.xlsm a OneDrive
+
+Usuarios (en carpeta api):
+  py -3.12 crear_usuario.py nombre Clave123!
+
+Admin por defecto: Admin / Admin123!
