@@ -5,9 +5,12 @@ PULL:
   git pull origin main
 
 INSTALAR (solo la primera vez):
-  0_INSTALAR_CLOUDFLARE.bat   -> descarga cloudflared (sin terminal)
+  0_INSTALAR_CLOUDFLARE.bat   -> descarga cloudflared
 
-CADA DIA (con Prueba_Ov abierto tambien):
+SI FALLA "puerto en uso":
+  0_LIBERAR_PUERTOS.bat       -> cierra procesos viejos en 8080 y 8011
+
+CADA DIA (en orden):
   1. 1_API_OLNATURA.bat       Python :8011
   2. 2_TUNEL_OLNATURA.bat     URL publica trycloudflare.com
 
