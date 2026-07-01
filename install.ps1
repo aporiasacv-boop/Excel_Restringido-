@@ -69,13 +69,33 @@ function Clear-ReadOnlyFlag {
 $excelProcs = Get-Process -Name EXCEL -ErrorAction SilentlyContinue
 if ($excelProcs -and -not $Force) {
     Write-Host ""
-    Write-Host "Excel esta abierto. Cierra Excel o ejecuta INSTALAR.bat" -ForegroundColor Yellow
+    Write-Host "Excel esta abierto. Cierre Excel y vuelva a ejecutar 2_INSTALAR_EXCEL.bat" -ForegroundColor Yellow
     Write-Host ""
     exit 1
 }
 
-$Workbooks = Get-ChildItem -LiteralPath $ProjectRoot -Filter "NIKZON*.xlsm" -File
-if ($Workbooks.Count -eq 0) { Write-Error "No hay archivos NIKZON*.xlsm en $ProjectRoot" }
+$InputDir = Join-Path $ProjectRoot "entrada"
+New-Item -ItemType Directory -Path $InputDir -Force | Out-Null
+
+$Workbooks = @()
+$Workbooks += Get-ChildItem -LiteralPath $InputDir -Filter "NIKZON*.xlsm" -File -ErrorAction SilentlyContinue
+$Workbooks += Get-ChildItem -LiteralPath $ProjectRoot -Filter "NIKZON*.xlsm" -File -ErrorAction SilentlyContinue
+$Workbooks = $Workbooks | Select-Object -Unique FullName
+
+if ($Workbooks.Count -eq 0) {
+    Write-Host ""
+    Write-Host "ERROR: No hay archivos NIKZON*.xlsm para instalar." -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Copie los Excel originales a:" -ForegroundColor Yellow
+    Write-Host "  $InputDir"
+    Write-Host ""
+    Write-Host "Ejemplo: NIKZON 1.xlsm, NIKZON 2.xlsm (los 4 formatos)"
+    Write-Host "Luego ejecute de nuevo 2_INSTALAR_EXCEL.bat"
+    Write-Host ""
+    exit 1
+}
+
+Write-Host "Origen: $($Workbooks.Count) archivo(s) NIKZON"
 
 $excel = New-Object -ComObject Excel.Application
 $excel.Visible = $false
@@ -150,5 +170,6 @@ finally {
 }
 
 Write-Host ""
-Write-Host "Excel listo en LISTOS. Configure API_BASE_URL en modAppConstants si despliega la API."
-Write-Host "Login central: Admin / Admin123!"
+Write-Host "Listo: $($Workbooks.Count) archivo(s) en LISTOS\"
+Write-Host "Suba esos .xlsm a OneDrive para produccion."
+Write-Host "Login: Admin / Admin123!"

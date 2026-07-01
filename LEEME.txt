@@ -14,8 +14,11 @@ CADA DIA (en orden):
   1. 1_API_OLNATURA.bat       Python :8011
   2. 2_TUNEL_OLNATURA.bat     URL publica trycloudflare.com
 
-Despues de tener la URL del tunel:
-  git pull + 2_INSTALAR_EXCEL.bat + subir LISTOS\ a OneDrive
+INSTALAR EXCEL NIKZON:
+  1. Copie los 4 archivos NIKZON*.xlsm a la carpeta entrada\
+  2. Cierre Excel
+  3. Doble clic en 2_INSTALAR_EXCEL.bat
+  4. Salida en LISTOS\ -> subir a OneDrive
 
 Ordenes de venta (otra carpeta Prueba_Ov):
   0_TOKEN_NGROK.bat (1 vez), 1_ORDENES_JAVA.bat, 2_NGROK.bat

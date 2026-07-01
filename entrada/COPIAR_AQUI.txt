@@ -1,0 +1,11 @@
+Ponga aqui los archivos Excel originales (sin macros de login):
+
+  NIKZON*.xlsm
+
+Ejemplo: NIKZON 1.xlsm, NIKZON 2.xlsm, etc.
+
+Estos archivos NO van en GitHub (son los formatos de la empresa).
+Copielos desde OneDrive o desde el respaldo que tengan en TI.
+
+Luego ejecute: 2_INSTALAR_EXCEL.bat
+La salida queda en la carpeta LISTOS\
