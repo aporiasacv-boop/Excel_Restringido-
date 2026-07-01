@@ -7,8 +7,11 @@ Public Sub ShowLoginForm()
 
     If Not modApi.ApiHealthCheck() Then
         MsgBox "No hay conexion con el servidor de validacion." & vbCrLf & vbCrLf & _
-            "Verifique internet y que el servicio en TI este activo." & vbCrLf & _
-            "URL: " & modAppConstants.API_BASE_URL, vbCritical, modAppConstants.APP_NAME
+            "En la PC de TI deben estar abiertos:" & vbCrLf & _
+            "  - 1_API_OLNATURA.bat (puerto 8011)" & vbCrLf & _
+            "  - 2_TUNEL_OLNATURA.bat (cloudflared)" & vbCrLf & vbCrLf & _
+            "Abra el Excel desde la carpeta LISTOS\ (no desde entrada ni copia vieja)." & vbCrLf & vbCrLf & _
+            "URL en este archivo: " & modAppConstants.API_BASE_URL, vbCritical, modAppConstants.APP_NAME
         ThisWorkbook.Close SaveChanges:=False
         Exit Sub
     End If
