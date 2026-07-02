@@ -98,6 +98,34 @@ def create_user(username: str, password: str, role: str = "user") -> None:
         )
 
 
+def upsert_user(username: str, password: str, role: str = "user") -> str:
+    """Crea o actualiza contraseña/rol. Devuelve 'created' o 'updated'."""
+    salt = new_salt()
+    pwd_hash = hash_password(password, salt)
+    with get_conn() as conn:
+        row = conn.execute(
+            "SELECT id FROM users WHERE username = ? COLLATE NOCASE", (username,)
+        ).fetchone()
+        if row:
+            conn.execute(
+                """
+                UPDATE users
+                SET password_hash = ?, salt = ?, role = ?, is_active = 1
+                WHERE id = ?
+                """,
+                (pwd_hash, salt, role, row["id"]),
+            )
+            return "updated"
+        conn.execute(
+            """
+            INSERT INTO users (username, password_hash, salt, role, is_active, created_at)
+            VALUES (?, ?, ?, ?, 1, ?)
+            """,
+            (username, pwd_hash, salt, role, _utc_now()),
+        )
+        return "created"
+
+
 def verify_user(username: str, password: str):
     user = find_user(username)
     if not user:

@@ -80,3 +80,28 @@ Public Sub WriteAnalystCell()
     End If
     On Error GoTo 0
 End Sub
+
+Public Sub LogLocalAccess()
+    On Error Resume Next
+    Const SHEET_NAME As String = "_Accesos"
+    Dim ws As Worksheet
+    Dim nextRow As Long
+
+    Set ws = Nothing
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets(SHEET_NAME)
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        ws.Name = SHEET_NAME
+        ws.Range("A1:C1").Value = Array("Fecha y hora", "Usuario", "Archivo")
+        ws.Visible = xlSheetVeryHidden
+    End If
+
+    nextRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row + 1
+    ws.Cells(nextRow, 1).Value = Now
+    ws.Cells(nextRow, 2).Value = g_CurrentUser
+    ws.Cells(nextRow, 3).Value = ThisWorkbook.Name
+    On Error GoTo 0
+End Sub

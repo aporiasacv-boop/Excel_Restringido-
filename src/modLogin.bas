@@ -31,6 +31,7 @@ Public Sub ShowLoginForm()
 
         If modApi.ApiLogin(username, password) Then
             modApi.WriteAnalystCell
+            modApi.LogLocalAccess
             ThisWorkbook.Worksheets(1).Activate
             Exit Sub
         End If

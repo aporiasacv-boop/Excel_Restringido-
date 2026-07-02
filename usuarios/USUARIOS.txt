@@ -1,0 +1,15 @@
+# Usuarios de prueba — Olnatura Excel NIKZON
+# Formato: usuario,contraseña,rol
+#   rol = user  (normal)  o  admin
+#
+# Edite este archivo y ejecute: 3_CARGAR_USUARIOS.bat
+# (en la PC de TI, con la API apagada o encendida, da igual)
+#
+# Admin por defecto (no esta en esta lista): Admin / Admin123!
+
+maria,Olnatura1!,user
+juan,Olnatura2!,user
+ana,Olnatura3!,user
+luis,Olnatura4!,user
+carmen,Olnatura5!,user
+pedro,Olnatura6!,user

@@ -14,6 +14,12 @@ CADA DIA (en orden):
   1. 1_API_OLNATURA.bat       Python :8011
   2. 2_TUNEL_OLNATURA.bat     URL publica trycloudflare.com
 
+USUARIOS (PC de TI):
+  Editar: usuarios\USUARIOS.txt
+  Cargar: 3_CARGAR_USUARIOS.bat
+  Ver accesos servidor: 4_VER_ACCESOS_SERVIDOR.bat
+  Admin: Admin / Admin123!
+
 INSTALAR EXCEL NIKZON:
   1. Copie los 4 archivos NIKZON*.xlsm a la carpeta entrada\
   2. Cierre Excel
