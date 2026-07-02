@@ -18,6 +18,8 @@ USUARIOS (PC de TI):
   Editar: usuarios\USUARIOS.txt
   Cargar: 3_CARGAR_USUARIOS.bat
   Ver accesos servidor: 4_VER_ACCESOS_SERVIDOR.bat
+  Ver accesos EN el Excel: Alt+F8 -> MostrarAccesos -> Ejecutar
+    (o Inicio -> Formato -> Ocultar y mostrar -> Mostrar -> _Accesos)
   Admin: Admin / Admin123!
 
 INSTALAR EXCEL NIKZON:

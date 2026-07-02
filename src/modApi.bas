@@ -96,7 +96,7 @@ Public Sub LogLocalAccess()
         Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
         ws.Name = SHEET_NAME
         ws.Range("A1:C1").Value = Array("Fecha y hora", "Usuario", "Archivo")
-        ws.Visible = xlSheetVeryHidden
+        ws.Visible = xlSheetHidden
     End If
 
     nextRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row + 1

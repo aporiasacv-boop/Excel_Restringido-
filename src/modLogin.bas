@@ -46,3 +46,24 @@ Public Sub ShowLoginFailedMessage()
     If Len(msg) = 0 Then msg = "Usuario o contrasena incorrectos, o la cuenta esta inactiva."
     MsgBox msg, vbExclamation, modAppConstants.APP_NAME
 End Sub
+
+' Ver registro de accesos en este Excel (Alt+F8 -> MostrarAccesos -> Ejecutar)
+Public Sub MostrarAccesos()
+    Const SHEET_NAME As String = "_Accesos"
+    Dim ws As Worksheet
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets(SHEET_NAME)
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        MsgBox "Aun no hay accesos registrados en este archivo.", vbInformation, modAppConstants.APP_NAME
+        Exit Sub
+    End If
+
+    ws.Visible = xlSheetVisible
+    ws.Activate
+    MsgBox "Hoja de accesos visible." & vbCrLf & vbCrLf & _
+        "Para ocultarla otra vez:" & vbCrLf & _
+        "Clic derecho en la pestaña _Accesos -> Ocultar", vbInformation, modAppConstants.APP_NAME
+End Sub
