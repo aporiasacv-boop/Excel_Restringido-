@@ -36,7 +36,6 @@ Public Sub ShowLoginForm()
             modAdmin.HideUsersSheet
             If modApi.IsAdmin() Then
                 modAdmin.ShowAdminButtons
-                MsgBox "Sesion Admin. Use los botones arriba a la izquierda para gestionar colaboradores.", vbInformation, modAppConstants.APP_NAME
             Else
                 modAdmin.HideAdminButtons
             End If

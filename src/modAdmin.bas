@@ -2,39 +2,8 @@ Attribute VB_Name = "modAdmin"
 Option Explicit
 
 Public Const USERS_SHEET As String = "_Usuarios"
+Public Const PANEL_SHEET As String = "_PanelAdmin"
 Private Const BTN_PREFIX As String = "Olnatura_Btn_"
-
-Public Sub EnsureAdminButtons()
-    Dim ws As Worksheet
-    Set ws = ThisWorkbook.Worksheets(1)
-    RemoveAdminButtonShapes ws
-    AddAdminButton ws, "Olnatura_Btn_Panel", "AdministrarUsuarios", "Colaboradores", 8, 8
-    AddAdminButton ws, "Olnatura_Btn_Alta", "AltaUsuario", "Alta usuario", 8, 34
-    AddAdminButton ws, "Olnatura_Btn_Baja", "BajaUsuario", "Baja usuario", 8, 60
-    AddAdminButton ws, "Olnatura_Btn_Reactivar", "ReactivarUsuario", "Reactivar", 8, 86
-    HideAdminButtons
-End Sub
-
-Private Sub RemoveAdminButtonShapes(ByVal ws As Worksheet)
-    Dim i As Long
-    On Error Resume Next
-    For i = ws.Shapes.Count To 1 Step -1
-        If Left$(ws.Shapes(i).Name, Len(BTN_PREFIX)) = BTN_PREFIX Then
-            ws.Shapes(i).Delete
-        End If
-    Next i
-    On Error GoTo 0
-End Sub
-
-Private Sub AddAdminButton(ByVal ws As Worksheet, ByVal btnName As String, ByVal macroName As String, ByVal caption As String, ByVal leftPos As Single, ByVal topPos As Single)
-    Dim shp As Shape
-    Const xlButtonControl As Long = 0
-    Set shp = ws.Shapes.AddFormControl(xlButtonControl, leftPos, topPos, 118, 22)
-    shp.Name = btnName
-    shp.OnAction = macroName
-    shp.TextFrame.Characters.Text = caption
-    shp.Visible = msoFalse
-End Sub
 
 Public Sub AdministrarUsuarios()
     If Not modApi.RequireAdmin() Then Exit Sub
@@ -102,30 +71,39 @@ Public Sub ReactivarUsuario()
     End If
 End Sub
 
+Public Sub VolverAlFormato()
+    HideAdminPanel
+    ThisWorkbook.Worksheets(1).Activate
+End Sub
+
 Public Sub OcultarPanelUsuarios()
     HideUsersSheet
+    VolverAlFormato
 End Sub
 
 Public Sub ShowAdminButtons()
-    Dim shp As Shape
-    On Error Resume Next
-    EnsureAdminButtons
-    For Each shp In ThisWorkbook.Worksheets(1).Shapes
-        If Left$(shp.Name, Len(BTN_PREFIX)) = BTN_PREFIX Then
-            shp.Visible = msoTrue
-        End If
-    Next shp
-    On Error GoTo 0
+    Dim ws As Worksheet
+
+    If Not modApi.IsAdmin() Then Exit Sub
+    On Error GoTo PanelFailed
+
+    Set ws = EnsurePanelSheet()
+    ws.Visible = xlSheetVisible
+    ws.Activate
+    Exit Sub
+
+PanelFailed:
+    MsgBox "No se pudo abrir el panel visual." & vbCrLf & _
+        "Use Alt+F8 y las macros AdministrarUsuarios / AltaUsuario / BajaUsuario.", vbExclamation, modAppConstants.APP_NAME
 End Sub
 
 Public Sub HideAdminButtons()
-    Dim shp As Shape
+    HideAdminPanel
+End Sub
+
+Public Sub HideAdminPanel()
     On Error Resume Next
-    For Each shp In ThisWorkbook.Worksheets(1).Shapes
-        If Left$(shp.Name, Len(BTN_PREFIX)) = BTN_PREFIX Then
-            shp.Visible = msoFalse
-        End If
-    Next shp
+    ThisWorkbook.Worksheets(PANEL_SHEET).Visible = xlSheetVeryHidden
     On Error GoTo 0
 End Sub
 
@@ -134,15 +112,61 @@ Public Sub ShowUsersSheet()
     Set ws = EnsureUsersSheet()
     ws.Visible = xlSheetVisible
     ws.Activate
-    MsgBox "Panel de colaboradores." & vbCrLf & vbCrLf & _
-        "Use los botones de la primera hoja o:" & vbCrLf & _
-        "  Alta usuario / Baja usuario / Reactivar / Colaboradores", vbInformation, modAppConstants.APP_NAME
 End Sub
 
 Public Sub HideUsersSheet()
     On Error Resume Next
     ThisWorkbook.Worksheets(USERS_SHEET).Visible = xlSheetVeryHidden
     On Error GoTo 0
+End Sub
+
+Private Function EnsurePanelSheet() As Worksheet
+    Dim ws As Worksheet
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets(PANEL_SHEET)
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        ws.Name = PANEL_SHEET
+        ws.Range("A1").Value = "Administracion de colaboradores - Olnatura"
+        ws.Range("A1").Font.Bold = True
+        ws.Range("A2").Value = "Los cambios se guardan en el servidor de TI."
+        BuildPanelButtons ws
+    End If
+
+    ws.Visible = xlSheetVeryHidden
+    Set EnsurePanelSheet = ws
+End Function
+
+Private Sub BuildPanelButtons(ByVal ws As Worksheet)
+    RemoveAdminButtonShapes ws
+    AddAdminButton ws, "Olnatura_Btn_Panel", "AdministrarUsuarios", "Ver colaboradores", 8, 40
+    AddAdminButton ws, "Olnatura_Btn_Alta", "AltaUsuario", "Alta usuario", 8, 68
+    AddAdminButton ws, "Olnatura_Btn_Baja", "BajaUsuario", "Baja usuario", 8, 96
+    AddAdminButton ws, "Olnatura_Btn_Reactivar", "ReactivarUsuario", "Reactivar", 8, 124
+    AddAdminButton ws, "Olnatura_Btn_Volver", "VolverAlFormato", "Volver al formato", 8, 152
+End Sub
+
+Private Sub RemoveAdminButtonShapes(ByVal ws As Worksheet)
+    Dim i As Long
+    On Error Resume Next
+    For i = ws.Shapes.Count To 1 Step -1
+        If Left$(ws.Shapes(i).Name, Len(BTN_PREFIX)) = BTN_PREFIX Then
+            ws.Shapes(i).Delete
+        End If
+    Next i
+    On Error GoTo 0
+End Sub
+
+Private Sub AddAdminButton(ByVal ws As Worksheet, ByVal btnName As String, ByVal macroName As String, ByVal caption As String, ByVal leftPos As Single, ByVal topPos As Single)
+    Dim shp As Shape
+    Const xlButtonControl As Long = 0
+    Set shp = ws.Shapes.AddFormControl(xlButtonControl, leftPos, topPos, 140, 24)
+    shp.Name = btnName
+    shp.OnAction = macroName
+    shp.TextFrame.Characters.Text = caption
 End Sub
 
 Public Function EnsureUsersSheet() As Worksheet

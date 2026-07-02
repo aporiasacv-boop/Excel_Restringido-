@@ -1,14 +1,11 @@
 # Panel Admin en Excel (solo usuario Admin)
 
-Tras entrar como Admin aparecen 4 botones arriba a la izquierda en la 1ra hoja:
+Tras entrar como Admin se abre la hoja oculta _PanelAdmin con botones:
 
-  Colaboradores  - ver lista sincronizada con servidor TI
-  Alta usuario   - nuevo colaborador
-  Baja usuario   - desactivar
-  Reactivar      - volver a activar
+  Ver colaboradores | Alta usuario | Baja usuario | Reactivar | Volver al formato
 
-Los operadores normales NO ven esos botones.
+Los operadores normales NO ven esa hoja.
+
+Si fallara el panel: Alt+F8 -> AdministrarUsuarios / AltaUsuario / BajaUsuario
 
 Requisitos: Excel de ESCRITORIO, macros habilitadas, API y tunel activos en TI.
-
-Tambien funcionan las macros Alt+F8 (AdministrarUsuarios, etc.).
