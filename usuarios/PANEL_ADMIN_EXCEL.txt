@@ -1,0 +1,16 @@
+# Panel Admin en Excel (solo usuario Admin)
+
+Desde Excel de ESCRITORIO, con macros habilitadas, entre como Admin.
+
+Alt+F8 -> elegir macro -> Ejecutar:
+
+  AdministrarUsuarios   Abre hoja _Usuarios (lista del servidor TI)
+  AltaUsuario           Nuevo colaborador (usuario + contraseña)
+  BajaUsuario           Desactivar (ya no entra)
+  ReactivarUsuario      Volver a activar
+  OcultarPanelUsuarios  Ocultar hoja
+
+Los cambios van DIRECTO al servidor en PC de TI (SQLite).
+No se guardan contraseñas en la hoja Excel.
+
+Operadores normales NO ven la hoja _Usuarios (muy oculta).

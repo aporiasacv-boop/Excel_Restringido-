@@ -18,6 +18,28 @@ class LoginRequest(BaseModel):
     workbook: Optional[str] = Field(default=None, max_length=200)
 
 
+class AdminAuth(BaseModel):
+    admin_username: str = Field(min_length=1, max_length=80)
+    admin_password: str = Field(min_length=1, max_length=120)
+
+
+class AdminCreateUser(AdminAuth):
+    username: str = Field(min_length=3, max_length=80)
+    password: str = Field(min_length=6, max_length=120)
+    role: str = Field(default="user", max_length=20)
+
+
+class AdminSetActive(AdminAuth):
+    is_active: bool = True
+
+
+def _require_admin(body: AdminAuth):
+    admin = db.verify_user(body.admin_username.strip(), body.admin_password)
+    if not admin or admin["role"] != "admin":
+        raise HTTPException(status_code=403, detail="Solo administradores")
+    return admin
+
+
 @app.on_event("startup")
 def startup() -> None:
     db.init_db()
@@ -51,6 +73,45 @@ def login(body: LoginRequest):
 @app.get("/audit")
 def audit(limit: int = 50):
     return {"ok": True, "items": db.list_audit(limit=min(limit, 200))}
+
+
+@app.post("/admin/users/list")
+def admin_users_list(body: AdminAuth):
+    _require_admin(body)
+    users = db.list_users()
+    lines = []
+    for u in users:
+        active = "1" if u["is_active"] else "0"
+        lines.append(f"{u['username']}|{u['role']}|{active}|{u['created_at']}")
+    return {"ok": True, "data": "\n".join(lines)}
+
+
+@app.post("/admin/users/create")
+def admin_users_create(body: AdminCreateUser):
+    _require_admin(body)
+    username = body.username.strip()
+    if username.lower() == "admin":
+        raise HTTPException(status_code=400, detail="Nombre reservado")
+    if db.find_user(username):
+        raise HTTPException(status_code=409, detail="El usuario ya existe")
+    role = body.role if body.role in ("user", "admin") else "user"
+    db.create_user(username, body.password, role)
+    db.write_audit(username=body.admin_username.strip(), user_id=None, workbook=None, action=f"admin_create:{username}")
+    return {"ok": True, "username": username, "role": role}
+
+
+@app.post("/admin/users/{username}/set-active")
+def admin_users_set_active(username: str, body: AdminSetActive):
+    _require_admin(body)
+    uname = username.strip()
+    if uname.lower() == "admin":
+        raise HTTPException(status_code=400, detail="No se puede desactivar Admin")
+    if not db.find_user(uname):
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    db.set_user_active(uname, body.is_active)
+    action = "admin_activate" if body.is_active else "admin_deactivate"
+    db.write_audit(username=body.admin_username.strip(), user_id=None, workbook=None, action=f"{action}:{uname}")
+    return {"ok": True, "username": uname, "is_active": body.is_active}
 
 
 if __name__ == "__main__":

@@ -161,3 +161,27 @@ def list_audit(limit: int = 100):
             (limit,),
         ).fetchall()
         return [dict(row) for row in rows]
+
+
+def list_users():
+    with get_conn() as conn:
+        rows = conn.execute(
+            """
+            SELECT username, role, is_active, created_at
+            FROM users
+            ORDER BY username COLLATE NOCASE
+            """
+        ).fetchall()
+        return [dict(row) for row in rows]
+
+
+def set_user_active(username: str, is_active: bool) -> bool:
+    with get_conn() as conn:
+        cur = conn.execute(
+            """
+            UPDATE users SET is_active = ?
+            WHERE username = ? COLLATE NOCASE
+            """,
+            (1 if is_active else 0, username),
+        )
+        return cur.rowcount > 0

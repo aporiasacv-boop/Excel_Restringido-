@@ -14,12 +14,17 @@ CADA DIA (en orden):
   1. 1_API_OLNATURA.bat       Python :8011
   2. 2_TUNEL_OLNATURA.bat     URL publica trycloudflare.com
 
-USUARIOS (PC de TI):
-  Editar: usuarios\USUARIOS.txt
-  Cargar: 3_CARGAR_USUARIOS.bat
-  Ver accesos servidor: 4_VER_ACCESOS_SERVIDOR.bat
-  Ver accesos EN el Excel: Alt+F8 -> MostrarAccesos -> Ejecutar
-    (o Inicio -> Formato -> Ocultar y mostrar -> Mostrar -> _Accesos)
+USUARIOS (PC de TI, opcional):
+  Editar: usuarios\USUARIOS.txt + 3_CARGAR_USUARIOS.bat
+
+GESTION DESDE EXCEL (solo Admin, Alt+F8):
+  AdministrarUsuarios  - ver lista sincronizada con servidor TI
+  AltaUsuario          - dar de alta colaborador
+  BajaUsuario          - desactivar (no puede entrar)
+  ReactivarUsuario     - volver a activar
+  OcultarPanelUsuarios - ocultar hoja _Usuarios
+
+  Ver accesos: MostrarAccesos | 4_VER_ACCESOS_SERVIDOR.bat
   Admin: Admin / Admin123!
 
 INSTALAR EXCEL NIKZON:

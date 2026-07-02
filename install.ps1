@@ -17,7 +17,8 @@ $StdModules = @(
     "modUtils.bas",
     "modApi.bas",
     "modBootstrap.bas",
-    "modLogin.bas"
+    "modLogin.bas",
+    "modAdmin.bas"
 )
 
 $ThisWorkbookCode = @"
@@ -30,6 +31,11 @@ Private Sub Workbook_Open()
     Exit Sub
 OpenFailed:
     MsgBox "Error al iniciar: " & Err.Description, vbCritical, "Olnatura"
+End Sub
+
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    modApi.ClearSession
+    modAdmin.HideUsersSheet
 End Sub
 "@
 

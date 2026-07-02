@@ -30,8 +30,14 @@ Public Sub ShowLoginForm()
         End If
 
         If modApi.ApiLogin(username, password) Then
+            modApi.SetSessionPassword password
             modApi.WriteAnalystCell
             modApi.LogLocalAccess
+            modAdmin.HideUsersSheet
+            If modApi.IsAdmin() Then
+                MsgBox "Sesion Admin." & vbCrLf & vbCrLf & _
+                    "Gestionar colaboradores: Alt+F8 -> AdministrarUsuarios", vbInformation, modAppConstants.APP_NAME
+            End If
             ThisWorkbook.Worksheets(1).Activate
             Exit Sub
         End If
