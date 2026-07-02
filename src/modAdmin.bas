@@ -2,6 +2,39 @@ Attribute VB_Name = "modAdmin"
 Option Explicit
 
 Public Const USERS_SHEET As String = "_Usuarios"
+Private Const BTN_PREFIX As String = "Olnatura_Btn_"
+
+Public Sub EnsureAdminButtons()
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(1)
+    RemoveAdminButtonShapes ws
+    AddAdminButton ws, "Olnatura_Btn_Panel", "AdministrarUsuarios", "Colaboradores", 8, 8
+    AddAdminButton ws, "Olnatura_Btn_Alta", "AltaUsuario", "Alta usuario", 8, 34
+    AddAdminButton ws, "Olnatura_Btn_Baja", "BajaUsuario", "Baja usuario", 8, 60
+    AddAdminButton ws, "Olnatura_Btn_Reactivar", "ReactivarUsuario", "Reactivar", 8, 86
+    HideAdminButtons
+End Sub
+
+Private Sub RemoveAdminButtonShapes(ByVal ws As Worksheet)
+    Dim i As Long
+    On Error Resume Next
+    For i = ws.Shapes.Count To 1 Step -1
+        If Left$(ws.Shapes(i).Name, Len(BTN_PREFIX)) = BTN_PREFIX Then
+            ws.Shapes(i).Delete
+        End If
+    Next i
+    On Error GoTo 0
+End Sub
+
+Private Sub AddAdminButton(ByVal ws As Worksheet, ByVal btnName As String, ByVal macroName As String, ByVal caption As String, ByVal leftPos As Single, ByVal topPos As Single)
+    Dim shp As Shape
+    Const xlButtonControl As Long = 0
+    Set shp = ws.Shapes.AddFormControl(xlButtonControl, leftPos, topPos, 118, 22)
+    shp.Name = btnName
+    shp.OnAction = macroName
+    shp.TextFrame.Characters.Text = caption
+    shp.Visible = msoFalse
+End Sub
 
 Public Sub AdministrarUsuarios()
     If Not modApi.RequireAdmin() Then Exit Sub
@@ -76,8 +109,9 @@ End Sub
 Public Sub ShowAdminButtons()
     Dim shp As Shape
     On Error Resume Next
+    EnsureAdminButtons
     For Each shp In ThisWorkbook.Worksheets(1).Shapes
-        If Left$(shp.Name, 13) = "Olnatura_Btn_" Then
+        If Left$(shp.Name, Len(BTN_PREFIX)) = BTN_PREFIX Then
             shp.Visible = msoTrue
         End If
     Next shp
@@ -88,7 +122,7 @@ Public Sub HideAdminButtons()
     Dim shp As Shape
     On Error Resume Next
     For Each shp In ThisWorkbook.Worksheets(1).Shapes
-        If Left$(shp.Name, 13) = "Olnatura_Btn_" Then
+        If Left$(shp.Name, Len(BTN_PREFIX)) = BTN_PREFIX Then
             shp.Visible = msoFalse
         End If
     Next shp

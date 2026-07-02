@@ -73,38 +73,6 @@ function Clear-ReadOnlyFlag {
     if ($item.IsReadOnly) { $item.IsReadOnly = $false }
 }
 
-function Remove-OlnaturaAdminButtons {
-    param($Worksheet)
-    foreach ($shape in @($Worksheet.Shapes)) {
-        if ($shape.Name -like "Olnatura_Btn_*") {
-            $shape.Delete()
-        }
-    }
-}
-
-function Add-OlnaturaAdminButtons {
-    param($Worksheet)
-    Remove-OlnaturaAdminButtons $Worksheet
-    $xlButtonControl = 0
-    $msoFalse = 0
-    $left = 8
-    $width = 118
-    $height = 22
-    $defs = @(
-        @{ Name = "Olnatura_Btn_Panel"; Macro = "AdministrarUsuarios"; Label = "Colaboradores"; Top = 8 },
-        @{ Name = "Olnatura_Btn_Alta"; Macro = "AltaUsuario"; Label = "Alta usuario"; Top = 34 },
-        @{ Name = "Olnatura_Btn_Baja"; Macro = "BajaUsuario"; Label = "Baja usuario"; Top = 60 },
-        @{ Name = "Olnatura_Btn_Reactivar"; Macro = "ReactivarUsuario"; Label = "Reactivar"; Top = 86 }
-    )
-    foreach ($def in $defs) {
-        $shape = $Worksheet.Shapes.AddFormControl($xlButtonControl, $left, $def.Top, $width, $height)
-        $shape.Name = $def.Name
-        $shape.OnAction = $def.Macro
-        $shape.TextFrame.Characters().Text = $def.Label
-        $shape.Visible = $msoFalse
-    }
-}
-
 $excelProcs = Get-Process -Name EXCEL -ErrorAction SilentlyContinue
 if ($excelProcs -and -not $Force) {
     Write-Host ""
@@ -203,9 +171,6 @@ try {
             $codeMod.DeleteLines(1, $codeMod.CountOfLines)
         }
         $codeMod.AddFromString($ThisWorkbookCode)
-
-        Write-Host "  Botones Admin (esquina superior izquierda)..."
-        Add-OlnaturaAdminButtons $book.Worksheets.Item(1)
 
         $outPath = Join-Path $OutDir $wbFile.Name
         if (Test-Path -LiteralPath $outPath) { Remove-Item -LiteralPath $outPath -Force }
