@@ -73,18 +73,36 @@ Public Sub OcultarPanelUsuarios()
     HideUsersSheet
 End Sub
 
+Public Sub ShowAdminButtons()
+    Dim shp As Shape
+    On Error Resume Next
+    For Each shp In ThisWorkbook.Worksheets(1).Shapes
+        If Left$(shp.Name, 13) = "Olnatura_Btn_" Then
+            shp.Visible = msoTrue
+        End If
+    Next shp
+    On Error GoTo 0
+End Sub
+
+Public Sub HideAdminButtons()
+    Dim shp As Shape
+    On Error Resume Next
+    For Each shp In ThisWorkbook.Worksheets(1).Shapes
+        If Left$(shp.Name, 13) = "Olnatura_Btn_" Then
+            shp.Visible = msoFalse
+        End If
+    Next shp
+    On Error GoTo 0
+End Sub
+
 Public Sub ShowUsersSheet()
     Dim ws As Worksheet
     Set ws = EnsureUsersSheet()
     ws.Visible = xlSheetVisible
     ws.Activate
     MsgBox "Panel de colaboradores." & vbCrLf & vbCrLf & _
-        "Alt+F8:" & vbCrLf & _
-        "  AltaUsuario - nuevo colaborador" & vbCrLf & _
-        "  BajaUsuario - desactivar" & vbCrLf & _
-        "  ReactivarUsuario - volver a activar" & vbCrLf & _
-        "  AdministrarUsuarios - actualizar lista" & vbCrLf & _
-        "  OcultarPanelUsuarios - ocultar esta hoja", vbInformation, modAppConstants.APP_NAME
+        "Use los botones de la primera hoja o:" & vbCrLf & _
+        "  Alta usuario / Baja usuario / Reactivar / Colaboradores", vbInformation, modAppConstants.APP_NAME
 End Sub
 
 Public Sub HideUsersSheet()

@@ -35,8 +35,10 @@ Public Sub ShowLoginForm()
             modApi.LogLocalAccess
             modAdmin.HideUsersSheet
             If modApi.IsAdmin() Then
-                MsgBox "Sesion Admin." & vbCrLf & vbCrLf & _
-                    "Gestionar colaboradores: Alt+F8 -> AdministrarUsuarios", vbInformation, modAppConstants.APP_NAME
+                modAdmin.ShowAdminButtons
+                MsgBox "Sesion Admin. Use los botones arriba a la izquierda para gestionar colaboradores.", vbInformation, modAppConstants.APP_NAME
+            Else
+                modAdmin.HideAdminButtons
             End If
             ThisWorkbook.Worksheets(1).Activate
             Exit Sub

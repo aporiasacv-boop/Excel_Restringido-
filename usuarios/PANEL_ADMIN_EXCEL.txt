@@ -1,16 +1,14 @@
 # Panel Admin en Excel (solo usuario Admin)
 
-Desde Excel de ESCRITORIO, con macros habilitadas, entre como Admin.
+Tras entrar como Admin aparecen 4 botones arriba a la izquierda en la 1ra hoja:
 
-Alt+F8 -> elegir macro -> Ejecutar:
+  Colaboradores  - ver lista sincronizada con servidor TI
+  Alta usuario   - nuevo colaborador
+  Baja usuario   - desactivar
+  Reactivar      - volver a activar
 
-  AdministrarUsuarios   Abre hoja _Usuarios (lista del servidor TI)
-  AltaUsuario           Nuevo colaborador (usuario + contraseña)
-  BajaUsuario           Desactivar (ya no entra)
-  ReactivarUsuario      Volver a activar
-  OcultarPanelUsuarios  Ocultar hoja
+Los operadores normales NO ven esos botones.
 
-Los cambios van DIRECTO al servidor en PC de TI (SQLite).
-No se guardan contraseñas en la hoja Excel.
+Requisitos: Excel de ESCRITORIO, macros habilitadas, API y tunel activos en TI.
 
-Operadores normales NO ven la hoja _Usuarios (muy oculta).
+Tambien funcionan las macros Alt+F8 (AdministrarUsuarios, etc.).

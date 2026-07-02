@@ -17,14 +17,10 @@ CADA DIA (en orden):
 USUARIOS (PC de TI, opcional):
   Editar: usuarios\USUARIOS.txt + 3_CARGAR_USUARIOS.bat
 
-GESTION DESDE EXCEL (solo Admin, Alt+F8):
-  AdministrarUsuarios  - ver lista sincronizada con servidor TI
-  AltaUsuario          - dar de alta colaborador
-  BajaUsuario          - desactivar (no puede entrar)
-  ReactivarUsuario     - volver a activar
-  OcultarPanelUsuarios - ocultar hoja _Usuarios
-
-  Ver accesos: MostrarAccesos | 4_VER_ACCESOS_SERVIDOR.bat
+GESTION DESDE EXCEL (solo Admin):
+  Botones arriba a la izquierda tras login Admin:
+    Colaboradores | Alta usuario | Baja usuario | Reactivar
+  (Ver usuarios/PANEL_ADMIN_EXCEL.txt)
   Admin: Admin / Admin123!
 
 INSTALAR EXCEL NIKZON:
